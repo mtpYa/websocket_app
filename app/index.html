@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WebSocket</title>
+  
+</head>
+<body>
+  <h1>My App</h1>
+  <div id="messages"></div>
+
+  <form class="formBox">
+      <!-- <button type="submit" name="button">Add a new message</button> -->
+      <div class="username">
+          <input type="text" id="username" placeholder="Your name" value= "Guest" required>
+      </div>
+      <div class="link">
+          <input type="text" id="linkAddress" placeholder="Link" required>
+      </div>
+      <div class="message-input">
+        <textarea type="text" id="message" placeholder="Enter a message" value="" required></textarea>
+      </div>
+      <input class="sendMessageButton" type="submit" name="name" value="Send!">
+  </form>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
