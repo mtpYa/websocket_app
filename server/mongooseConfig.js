@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose').set('debug', true);;
 
 var options = {
   server: {
@@ -31,6 +31,15 @@ var commentSchema = mongoose.Schema({
   ts: String
 });
 
-var Comment = mongoose.model('Comment', commentSchema);
+var userSchema = mongoose.Schema({
+  name: String,
+  password: String
+});
 
-module.exports = Comment;
+var Comment = mongoose.model('Comment', commentSchema);
+var User = mongoose.model('User', userSchema);
+
+module.exports = {
+  Comment,
+  User
+}

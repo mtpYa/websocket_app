@@ -8,20 +8,23 @@ function randomId() {
 }
 
 var socket = io.connect('http://localhost:3000', {
-      'forceNew': true
+  'forceNew': true
 });
 var submitBtn = document.querySelector('.sendMessageButton');
 var likeBtn = document.querySelector('.likes-count');
+var userNameInput = document.querySelector('.userName');
+var userPassInput = document.querySelector('.userPassword');
+var loginSubmit = document.querySelector('.loginSubmit');
 
-socket.on('messages', function(data) {
+socket.on('messages', function (data) {
   console.info(data);
   messageCache = data;
-  render(); 
+  render();
 });
 
 function render() {
   var data = messageCache;
-  var html = data.map(function(data, idx) {
+  var html = data.map(function (data, idx) {
     return (`
       <div class="singleMessage">
         <h3 class="name">
@@ -40,7 +43,7 @@ function render() {
   document.querySelector('#messages').innerHTML = html;
 }
 
-submitBtn.onclick = function(e) {
+submitBtn.onclick = function (e) {
   e.preventDefault();
 
   var payload = {
@@ -52,12 +55,28 @@ submitBtn.onclick = function(e) {
   };
 
   socket.emit('new-message', payload);
-}
+};
+
+loginSubmit.onclick = function (e) {
+  e.preventDefault();
+  var reqBody = JSON.stringify({
+    username: userNameInput.value,
+    password: userPassInput.value
+  });
+
+  $.post('/login',{
+    username: userNameInput.value,
+    password: userPassInput.value
+  })
+  .done(function(data){
+    console.log(data);
+  });
+};
 
 function likeMessage(message) {
   var index = message.likedBy.indexOf(userId);
 
-  if(index < 0) {
+  if (index < 0) {
     message.likedBy.push(userId);
   } else {
     message.likedBy.splice(index, 1);

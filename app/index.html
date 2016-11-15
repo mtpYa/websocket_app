@@ -1,26 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>WebSocket</title>
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
+
 <body>
   <h1>My App</h1>
+  <div class="loginForm">
+    <form action="/login" method="post">
+      <div class="loginField">
+        <label>Username:</label>
+        <input type="text" name="username" placeholder="Name" class="userName" />
+      </div>
+      <div class="loginField">
+        <label>Password:</label>
+        <input type="password" name="password" placeholder="Password" class="userPassword" />
+      </div>
+      <div>
+        <input type="submit" value="Log In" class="loginSubmit" />
+      </div>
+    </form>
+  </div>
+  <div class="loginMessage"></div>
+  <hr />
   <div id="messages"></div>
   <br />
   <form class="formBox">
-      <!-- <button type="submit" name="button">Add a new message</button> -->
-      <div class="username">
-          <input type="text" id="username" placeholder="Your name" value= "" required>
-      </div>
-      <br />
-      <div class="message-input">
-        <textarea type="text" id="message" placeholder="Enter a message" value="" required></textarea>
-      </div>
-      <input class="sendMessageButton" type="submit" name="name" value="Send!">
+    <!-- <button type="submit" name="button">Add a new message</button> -->
+    <div class="username">
+      <input type="text" id="username" placeholder="Your name" value="" required>
+    </div>
+    <div class="message-input">
+      <textarea type="text" id="message" placeholder="Enter a message" value="" required></textarea>
+    </div>
+    <input class="sendMessageButton" type="submit" name="name" value="Send!">
   </form>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script src="main.js"></script>
 </body>
+
 </html>
