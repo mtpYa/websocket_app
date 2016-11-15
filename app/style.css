@@ -12,7 +12,7 @@ h3 {
   padding: 10px;
   border-radius: 20px;
   border: 2px solid #275b97;
-  width: 25%;
+  width: 350px;
   margin: 10px 0;
 }
 
@@ -23,6 +23,10 @@ h3 {
 
 .likes-count,
 .sendMessageButton,
+.loginSubmit,
+.logoutSubmit,
+.userName,
+.userPassword,
 #message,
 #username {
   display: inline-block;
@@ -30,12 +34,35 @@ h3 {
   border-radius: 7px;
 }
 
+.sendMessageButton,
+.loginSubmit,
+.logoutSubmit {
+  padding: 5px 15px;
+}
+
+.userName,
+.userPassword,
 #message,
 #username {
-  min-width: 26%;
+  width: 350px;
   padding: 5px;
+  margin: 10px 0;
+}
+
+.userName,
+.userPassword {
+  width: 150px;
+  padding: 5px;
+  margin: 0 10px 0 0;
 }
 
 #message {
   min-height: 100px;
+}
+
+.loginMessage {
+  font-size: 22px;
+  font-weight: 600;
+  color: #584ed8;
+  margin: 15px 0;
 }

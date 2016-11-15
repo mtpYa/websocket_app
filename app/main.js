@@ -15,6 +15,8 @@ var likeBtn = document.querySelector('.likes-count');
 var userNameInput = document.querySelector('.userName');
 var userPassInput = document.querySelector('.userPassword');
 var loginSubmit = document.querySelector('.loginSubmit');
+var logoutSubmit = document.querySelector('.logoutSubmit');
+var messageContainer = document.querySelector('.loginMessage');
 
 socket.on('messages', function (data) {
   console.info(data);
@@ -57,20 +59,38 @@ submitBtn.onclick = function (e) {
   socket.emit('new-message', payload);
 };
 
-loginSubmit.onclick = function (e) {
+loginSubmit.onclick = function(e) {
   e.preventDefault();
-  var reqBody = JSON.stringify({
-    username: userNameInput.value,
-    password: userPassInput.value
-  });
 
   $.post('/login',{
     username: userNameInput.value,
     password: userPassInput.value
   })
   .done(function(data){
-    console.log(data);
+    showMessage('You logged in successfully');
+    logoutSubmit.disabled = false;
+    loginSubmit.disabled = true;
+    userNameInput.value = '';
+    userPassInput.value = ''
+  })
+  .fail(function(){
+    showMessage('Entered incorrect data');
   });
+};
+
+logoutSubmit.onclick = function(e) {
+  e.preventDefault();
+
+  $.get('/logout')
+  .done(function(){
+    showMessage('You logged out successfully');
+    logoutSubmit.disabled = true;
+    loginSubmit.disabled = false;
+  })
+  .fail(function(){
+    showMessage('You have to log in first');
+  });;
+  
 };
 
 function likeMessage(message) {
@@ -86,4 +106,11 @@ function likeMessage(message) {
   render();
 
   return false;
+}
+
+function showMessage(msg) {
+  messageContainer.innerHTML = msg;
+  setTimeout(function(){
+    messageContainer.innerHTML = '';
+  }, 1000);
 }

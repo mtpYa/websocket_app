@@ -11,17 +11,10 @@
   <h1>My App</h1>
   <div class="loginForm">
     <form action="/login" method="post">
-      <div class="loginField">
-        <label>Username:</label>
-        <input type="text" name="username" placeholder="Name" class="userName" />
-      </div>
-      <div class="loginField">
-        <label>Password:</label>
-        <input type="password" name="password" placeholder="Password" class="userPassword" />
-      </div>
-      <div>
-        <input type="submit" value="Log In" class="loginSubmit" />
-      </div>
+      <input type="text" name="username" placeholder="Name" class="userName" />
+      <input type="password" name="password" placeholder="Password" class="userPassword" />
+      <input type="submit" value="Log In" class="loginSubmit" />
+      <input type="submit" value="Log Out" class="logoutSubmit" disabled/>
     </form>
   </div>
   <div class="loginMessage"></div>

@@ -4,12 +4,18 @@ var LocalStrategy = require('passport-local').Strategy;
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
-var session = require('express-session')
+var session = require('express-session');
+var bodyParser = require('body-parser');
 
 var io = require('socket.io')(server);
 
 var Comment = require('./mongooseConfig').Comment;
 var User = require('./mongooseConfig').User;
+
+app.use(bodyParser.urlencoded({
+  extended: false
+}))
+app.use(bodyParser.json())
 
 app.use(express.static('app'));
 app.use(session({
@@ -22,7 +28,6 @@ app.use(passport.session());
 
 //-------passport section------------------
 passport.use(new LocalStrategy(function (username, password, done) {
-  console.log(username, password);
   User.findOne({
     name: username,
     password: password
@@ -37,22 +42,30 @@ passport.use(new LocalStrategy(function (username, password, done) {
   });
 }));
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user);
 });
 
-passport.deserializeUser(function(user, done) {
-    done(err, user);
+passport.deserializeUser(function (user, done) {
+  done(null, user);
 });
 
 app.post('/login', passport.authenticate('local'), function (req, res) {
   res.send(req.user);
 });
+
+app.get('/logout', function (req, res) {
+  if(req.user) {
+    req.logout();
+    res.send('Exit session successfully');
+  }
+  res.status(404).end();
+});
 //---------passport section end-------------------
 
 //---------socketIO section-----------------------
 io.on('connection', function (socket) {
-  console.log('Connection to Socket.io established');
+  console.log('Connection to Socket.io is established');
 
   Comment.find({}, function (err, comments) {
     if (err) {
