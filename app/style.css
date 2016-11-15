@@ -1,0 +1,41 @@
+body {
+  background: #d3e0ef;
+  margin: 10px;
+}
+
+h3 {
+  margin: 5px 0;
+}
+
+.singleMessage {
+  background: #529cf1;
+  padding: 10px;
+  border-radius: 20px;
+  border: 2px solid #275b97;
+  width: 25%;
+  margin: 10px 0;
+}
+
+.message {
+  display: inline-block;
+  width: 80%;
+}
+
+.likes-count,
+.sendMessageButton,
+#message,
+#username {
+  display: inline-block;
+  border: 2px solid #3a5269;
+  border-radius: 7px;
+}
+
+#message,
+#username {
+  min-width: 26%;
+  padding: 5px;
+}
+
+#message {
+  min-height: 100px;
+}

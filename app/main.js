@@ -23,14 +23,18 @@ function render() {
   var data = messageCache;
   var html = data.map(function(data, idx) {
     return (`
-      <div class="name">
-        ${data.userName}
-      </div> 
-      <a href=${data.content.link} class="message" target=blank>
-        ${data.content.text}
-      </a>
-      <input type="button" onclick="likeMessage(messageCache[${idx}])" value="${data.likedBy.length} Likes" class="likes-count">
-      `);
+      <div class="singleMessage">
+        <h3 class="name">
+          ${data.userName}
+        </h3>
+        <div> 
+          <div class="message">
+            ${data.content}
+          </div>
+          <input type="button" onclick="likeMessage(messageCache[${idx}])" value="${data.likedBy.length} Likes" class="likes-count">
+        </div>
+      </div>
+    `);
   }).join(' ');
 
   document.querySelector('#messages').innerHTML = html;
@@ -42,12 +46,9 @@ submitBtn.onclick = function(e) {
   var payload = {
     messageId: randomId(),
     userName: document.querySelector('#username').value,
-    content: {
-      text: document.querySelector('#message').value,
-      link: document.querySelector('#linkAddress').value
-    },
+    content: document.querySelector('#message').value,
     likedBy: [],
-    ts: Date.now()
+    ts: Date.now().toString()
   };
 
   socket.emit('new-message', payload);
