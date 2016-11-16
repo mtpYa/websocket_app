@@ -1,4 +1,4 @@
-var currentUser={};
+var currentUser = {};
 
 var socket = io.connect('http://localhost:3000', {
   'forceNew': true
@@ -41,14 +41,16 @@ function render() {
 submitBtn.onclick = function (e) {
   e.preventDefault();
 
-  var payload = {
-    userName: document.querySelector('#username').value,
-    content: document.querySelector('#message').value,
-    likedBy: [],
-    ts: Date.now().toString()
-  };
+  if (currentUser.name) {
+    var payload = {
+      userName: document.querySelector('#username').value,
+      content: document.querySelector('#message').value,
+      likedBy: [],
+      ts: Date.now().toString()
+    };
 
-  socket.emit('new-message', payload);
+    socket.emit('new-message', payload);
+  }
 };
 
 loginSubmit.onclick = function (e) {
