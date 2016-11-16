@@ -55,7 +55,7 @@ app.post('/login', passport.authenticate('local'), function (req, res) {
 });
 
 app.get('/logout', function (req, res) {
-  if(req.user) {
+  if (req.user) {
     req.logout();
     res.send('Exit session successfully');
   }
@@ -92,18 +92,36 @@ io.on('connection', function (socket) {
   });
 
   socket.on('update-message', function (data) {
-    // var message = messages.filter(function (message) {
-    //   return message.messageId == data.messageId
-    // })[0];
-
-    // message.likedBy = data.likedBy;
-    // console.info('Updated message: ' + message.content);
-    // io.sockets.emit('messages', messages);
+    var userId = data.userId;
+    var commentId = data.messageId;
+    if (userId) {
+      Comment.findById(commentId, function (err, comment) {
+        if (err) {
+          res.send(err);
+        }
+        var newLikedBy = comment.likedBy;
+        var idx = newLikedBy.indexOf(userId);
+        if (idx === -1) {
+          newLikedBy.push(userId);
+        } else {
+          newLikedBy.splice(idx, 1);
+        }
+        comment.save(function (err, comment) {
+          if (err) {
+            res.send(err);
+          }
+          Comment.find({}, function (err, comments) {
+            if (err) {
+              res.send(err);
+            }
+            io.sockets.emit('messages', comments);
+          });
+        });
+      });
+    }
   });
-
 });
 //---------socketIO section end-----------------------
-
 
 server.listen(3000, function () {
   console.log('Server is listening on port 3000');

@@ -24,7 +24,6 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
 var commentSchema = mongoose.Schema({
-  messageId: Number,
   userName: String,
   content: String,
   likedBy: Array,

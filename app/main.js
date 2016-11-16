@@ -1,11 +1,4 @@
-var userId = localStorage.getItem('userId') || randomId();
-localStorage.setItem('userId', userId);
-var messageCache;
-console.info('Hello, I am user #' + userId);
-
-function randomId() {
-  return Math.floor(Math.random() * 1e11);
-}
+var currentUser={};
 
 var socket = io.connect('http://localhost:3000', {
   'forceNew': true
@@ -36,7 +29,7 @@ function render() {
           <div class="message">
             ${data.content}
           </div>
-          <input type="button" onclick="likeMessage(messageCache[${idx}])" value="${data.likedBy.length} Likes" class="likes-count">
+          <input type="button" onclick="likeMessage('${data._id}')" value="${data.likedBy.length} Likes" class="likes-count">
         </div>
       </div>
     `);
@@ -49,7 +42,6 @@ submitBtn.onclick = function (e) {
   e.preventDefault();
 
   var payload = {
-    messageId: randomId(),
     userName: document.querySelector('#username').value,
     content: document.querySelector('#message').value,
     likedBy: [],
@@ -59,58 +51,47 @@ submitBtn.onclick = function (e) {
   socket.emit('new-message', payload);
 };
 
-loginSubmit.onclick = function(e) {
+loginSubmit.onclick = function (e) {
   e.preventDefault();
 
-  $.post('/login',{
-    username: userNameInput.value,
-    password: userPassInput.value
-  })
-  .done(function(data){
-    showMessage('You logged in successfully');
-    logoutSubmit.disabled = false;
-    loginSubmit.disabled = true;
-    userNameInput.value = '';
-    userPassInput.value = ''
-  })
-  .fail(function(){
-    showMessage('Entered incorrect data');
-  });
+  $.post('/login', {
+      username: userNameInput.value,
+      password: userPassInput.value
+    })
+    .done(function (data) {
+      currentUser = data;
+      showMessage(`You are logged as ${data.name}`);
+      logoutSubmit.disabled = false;
+      loginSubmit.disabled = true;
+      userNameInput.value = '';
+      userPassInput.value = ''
+    })
 };
 
-logoutSubmit.onclick = function(e) {
+logoutSubmit.onclick = function (e) {
   e.preventDefault();
 
   $.get('/logout')
-  .done(function(){
-    showMessage('You logged out successfully');
-    logoutSubmit.disabled = true;
-    loginSubmit.disabled = false;
-  })
-  .fail(function(){
-    showMessage('You have to log in first');
-  });;
-  
+    .done(function () {
+      currentUser = {};
+      showMessage(' ');
+      logoutSubmit.disabled = true;
+      loginSubmit.disabled = false;
+    })
 };
 
-function likeMessage(message) {
-  var index = message.likedBy.indexOf(userId);
-
-  if (index < 0) {
-    message.likedBy.push(userId);
-  } else {
-    message.likedBy.splice(index, 1);
-  }
-
-  socket.emit('update-message', message);
-  render();
+function likeMessage(messageId) {
+  socket.emit('update-message', {
+    messageId: messageId,
+    userId: currentUser._id
+  });
 
   return false;
 }
 
 function showMessage(msg) {
   messageContainer.innerHTML = msg;
-  setTimeout(function(){
-    messageContainer.innerHTML = '';
-  }, 1000);
+  // setTimeout(function () {
+  //   messageContainer.innerHTML = '';
+  // }, 1000);
 }
