@@ -13,19 +13,17 @@ var messageContainer = document.querySelector('.loginMessage');
 
 socket.on('messages', function (data) {
   console.info(data);
-  messageCache = data;
-  render();
+  render(data);
 });
 
-function render() {
-  var data = messageCache;
+function render(data) {
   var html = data.map(function (data, idx) {
     return (`
       <div class="singleMessage">
         <h3 class="name">
           ${data.userName}
         </h3>
-        <div> 
+        <div>
           <div class="message">
             ${data.content}
           </div>
